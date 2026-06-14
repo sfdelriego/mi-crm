@@ -3,49 +3,919 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRM Basic</title>
+  <title>VideCRM — CRM Moderno 2026</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    :root {
+      --bg-start: #020617;
+      --bg-end: #1e3a5f;
+      --primary: #60a5fa;
+      --primary-dark: #3b82f6;
+      --accent: #818cf8;
+      --accent2: #34d399;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --card-bg: rgba(255,255,255,0.04);
+      --card-border: rgba(96,165,250,0.18);
+      --glass: rgba(15,23,42,0.6);
     }
 
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
     body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
+      background-attachment: fixed;
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.1rem 6%;
+      backdrop-filter: blur(20px);
+      background: rgba(2,6,23,0.7);
+      border-bottom: 1px solid rgba(96,165,250,0.1);
+    }
+
+    .logo {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+    .logo span { color: var(--primary); }
+
+    nav ul {
+      display: flex;
+      gap: 2.2rem;
+      list-style: none;
+    }
+    nav ul a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav ul a:hover { color: var(--primary); }
+
+    .nav-cta {
+      padding: 0.55rem 1.4rem;
+      background: var(--primary);
+      color: #020617 !important;
+      border-radius: 8px;
+      font-weight: 700 !important;
+      transition: background 0.2s !important;
+    }
+    .nav-cta:hover { background: #93c5fd !important; color: #020617 !important; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      background-color: #f0f4f8;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 8rem 6% 4rem;
+      z-index: 1;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(96,165,250,0.1);
+      border: 1px solid rgba(96,165,250,0.3);
+      border-radius: 999px;
+      padding: 0.35rem 1rem;
+      font-size: 0.8rem;
+      color: var(--primary);
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 1.8rem;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--accent2);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
     }
 
     h1 {
-      font-size: 3rem;
-      color: #1a202c;
-      margin-bottom: 2rem;
+      font-size: clamp(2.6rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      max-width: 860px;
+      margin-bottom: 1.5rem;
+    }
+    h1 .gradient-text {
+      background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 60%, var(--accent2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 580px;
+      line-height: 1.7;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-primary {
+      padding: 0.85rem 2.2rem;
+      background: var(--primary);
+      color: #020617;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      box-shadow: 0 0 28px rgba(96,165,250,0.35);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 40px rgba(96,165,250,0.55);
+    }
+
+    .btn-secondary {
+      padding: 0.85rem 2.2rem;
+      background: transparent;
+      color: var(--text);
+      border: 1px solid rgba(96,165,250,0.35);
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .btn-secondary:hover {
+      border-color: var(--primary);
+      background: rgba(96,165,250,0.06);
+    }
+
+    /* GLOW ORBS */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .orb-1 {
+      width: 500px; height: 500px;
+      background: rgba(96,165,250,0.15);
+      top: 10%; left: -10%;
+    }
+    .orb-2 {
+      width: 400px; height: 400px;
+      background: rgba(129,140,248,0.12);
+      top: 30%; right: -8%;
+    }
+    .orb-3 {
+      width: 300px; height: 300px;
+      background: rgba(52,211,153,0.08);
+      bottom: 5%; left: 40%;
+    }
+
+    /* ── STATS BAR ── */
+    .stats-bar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--card-border);
+      border-bottom: 1px solid var(--card-border);
+      padding: 2rem 6%;
+    }
+    .stat-item {
+      flex: 1;
+      min-width: 160px;
+      text-align: center;
+      padding: 0 2rem;
+      border-right: 1px solid rgba(96,165,250,0.1);
+    }
+    .stat-item:last-child { border-right: none; }
+    .stat-number {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      display: block;
+      letter-spacing: -1px;
+    }
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 6rem 6%;
+    }
+
+    .section-eyebrow {
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--primary);
+      margin-bottom: 0.75rem;
+    }
+
+    h2 {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      max-width: 560px;
+      margin-bottom: 3rem;
+    }
+
+    /* ── FEATURE GRID ── */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.75rem;
+      transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+      backdrop-filter: blur(8px);
+    }
+    .feature-card:hover {
+      border-color: rgba(96,165,250,0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 32px rgba(96,165,250,0.12);
+    }
+
+    .card-icon {
+      width: 44px; height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+    .icon-blue  { background: rgba(96,165,250,0.15); }
+    .icon-purple{ background: rgba(129,140,248,0.15); }
+    .icon-green { background: rgba(52,211,153,0.15); }
+    .icon-orange{ background: rgba(251,146,60,0.15); }
+    .icon-pink  { background: rgba(244,114,182,0.15); }
+    .icon-cyan  { background: rgba(34,211,238,0.15); }
+
+    .feature-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* ── TWO-COL LAYOUT ── */
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .two-col.reverse { direction: rtl; }
+    .two-col.reverse > * { direction: ltr; }
+
+    /* ── MOCK UI CARDS ── */
+    .mock-ui {
+      background: rgba(2,6,23,0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 1.5rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 24px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(96,165,250,0.08);
+    }
+
+    .mock-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1.2rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(96,165,250,0.08);
+    }
+    .mock-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+    }
+    .mock-title {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-left: 0.5rem;
+    }
+
+    /* Contacts mock */
+    .contact-row {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .contact-row:last-child { border-bottom: none; }
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+    .contact-info { flex: 1; }
+    .contact-name { font-size: 0.85rem; font-weight: 600; }
+    .contact-sub  { font-size: 0.72rem; color: var(--text-muted); }
+    .tag {
+      font-size: 0.68rem;
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .tag-green  { background: rgba(52,211,153,0.15); color: #34d399; }
+    .tag-blue   { background: rgba(96,165,250,0.15); color: #60a5fa; }
+    .tag-orange { background: rgba(251,146,60,0.15); color: #fb923c; }
+    .tag-purple { background: rgba(167,139,250,0.15); color: #a78bfa; }
+
+    /* Pipeline mock */
+    .pipeline {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+    }
+    .pipeline-col {
+      flex-shrink: 0;
+      width: 140px;
+    }
+    .pipeline-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 0.6rem;
+    }
+    .pipeline-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 8px;
+      padding: 0.6rem 0.7rem;
+      margin-bottom: 0.5rem;
+      font-size: 0.75rem;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .pipeline-amount {
+      font-size: 0.7rem;
+      color: var(--accent2);
+      font-weight: 600;
+      margin-top: 0.2rem;
+    }
+
+    /* Social mock */
+    .social-feed { display: flex; flex-direction: column; gap: 0.7rem; }
+    .social-msg {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      border-left: 3px solid;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+    }
+    .social-icon { font-size: 1.1rem; flex-shrink: 0; margin-top: 0.1rem; }
+    .social-text { font-size: 0.78rem; line-height: 1.5; }
+    .social-meta { font-size: 0.7rem; color: var(--text-muted); margin-top: 0.2rem; }
+    .lead-pill {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      background: rgba(52,211,153,0.2);
+      color: var(--accent2);
+      font-weight: 700;
+      margin-top: 0.3rem;
+    }
+
+    /* Analytics mock */
+    .metrics-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .metric-box {
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
+      padding: 0.8rem;
       text-align: center;
     }
+    .metric-val { font-size: 1.2rem; font-weight: 800; }
+    .metric-lbl { font-size: 0.65rem; color: var(--text-muted); margin-top: 0.1rem; }
 
-    button {
-      padding: 0.85rem 2.5rem;
-      font-size: 1.1rem;
-      color: #fff;
-      background-color: #3b82f6;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background-color 0.2s;
+    .chart-bar-row { display: flex; align-items: flex-end; gap: 6px; height: 70px; padding-top: 0.5rem; }
+    .bar {
+      flex: 1;
+      border-radius: 4px 4px 0 0;
+      background: linear-gradient(to top, var(--primary-dark), var(--primary));
+      opacity: 0.85;
+      transition: opacity 0.2s;
+      position: relative;
+    }
+    .bar:hover { opacity: 1; }
+    .bar-label {
+      text-align: center;
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      margin-top: 4px;
     }
 
-    button:hover {
-      background-color: #2563eb;
+    /* ── SOCIAL SECTION BG ── */
+    .section-social { background: rgba(2,6,23,0.3); }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 6rem 6%;
+      position: relative;
+      z-index: 1;
+    }
+    .cta-box {
+      background: linear-gradient(135deg, rgba(96,165,250,0.1) 0%, rgba(129,140,248,0.08) 100%);
+      border: 1px solid rgba(96,165,250,0.2);
+      border-radius: 24px;
+      padding: 4rem 3rem;
+      max-width: 700px;
+      margin: 0 auto;
+      backdrop-filter: blur(12px);
+    }
+    .cta-box h2 { margin-bottom: 1rem; }
+    .cta-box p  { color: var(--text-muted); margin-bottom: 2rem; }
+
+    .input-row {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .input-row input {
+      padding: 0.8rem 1.2rem;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(96,165,250,0.2);
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 0.95rem;
+      outline: none;
+      min-width: 220px;
+      transition: border-color 0.2s;
+    }
+    .input-row input::placeholder { color: var(--text-muted); }
+    .input-row input:focus { border-color: var(--primary); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem 6%;
+      border-top: 1px solid rgba(96,165,250,0.08);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+    footer span { color: var(--primary); font-weight: 600; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .two-col { grid-template-columns: 1fr; gap: 2.5rem; }
+      .two-col.reverse { direction: ltr; }
+      nav ul { display: none; }
+      .metrics-row { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
-  <h1>Bienvenido a mi CRM</h1>
-  <button>Empezar</button>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Vide<span>CRM</span></div>
+    <ul>
+      <li><a href="#clientes">Clientes</a></li>
+      <li><a href="#social">Redes Sociales</a></li>
+      <li><a href="#analytics">Analytics</a></li>
+      <li><a href="#cta" class="nav-cta">Empezar gratis</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="hero-badge">Nuevo · VideCRM 2026</div>
+
+    <h1>
+      El CRM que hace crecer<br>
+      <span class="gradient-text">tu negocio digital</span>
+    </h1>
+    <p class="hero-sub">
+      Gestiona clientes, vende productos digitales, capta leads desde redes sociales
+      y analiza cada métrica — todo en una sola plataforma.
+    </p>
+    <div class="hero-actions">
+      <button class="btn-primary">Empezar gratis →</button>
+      <button class="btn-secondary">Ver demo en vivo</button>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-number">12 k+</span>
+      <div class="stat-label">Clientes activos</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">98 %</span>
+      <div class="stat-label">Satisfacción</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">3 x</span>
+      <div class="stat-label">Más leads captados</div>
+    </div>
+    <div class="stat-item">
+      <span class="stat-number">€ 0</span>
+      <div class="stat-label">Para empezar</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1 · GESTIÓN DE CLIENTES -->
+  <section id="clientes">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow">Gestión de Clientes</div>
+        <h2>Todo tu equipo de ventas, perfectamente sincronizado</h2>
+        <p class="section-desc">
+          Pipeline visual drag & drop, historial completo de cada contacto, seguimiento
+          automático de tareas y recordatorios inteligentes para nunca perder una oportunidad.
+        </p>
+        <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="feature-card">
+            <div class="card-icon icon-blue">👥</div>
+            <h3>Pipeline visual</h3>
+            <p>Arrastra oportunidades entre etapas de venta con un clic.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-green">🔔</div>
+            <h3>Recordatorios IA</h3>
+            <p>La IA detecta cuándo retomar el contacto con un cliente.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-purple">📋</div>
+            <h3>Historial 360°</h3>
+            <p>Emails, llamadas, notas y compras en una sola vista.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-orange">⚡</div>
+            <h3>Automatizaciones</h3>
+            <p>Workflows sin código para seguimiento y onboarding.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock: Contactos + Pipeline -->
+      <div>
+        <div class="mock-ui">
+          <div class="mock-header">
+            <div class="mock-dot" style="background:#ff5f57"></div>
+            <div class="mock-dot" style="background:#febc2e"></div>
+            <div class="mock-dot" style="background:#28c840"></div>
+            <span class="mock-title">CRM · Clientes</span>
+          </div>
+
+          <div class="contact-row">
+            <div class="avatar" style="background:rgba(96,165,250,0.2);color:#60a5fa">MA</div>
+            <div class="contact-info">
+              <div class="contact-name">María Álvarez</div>
+              <div class="contact-sub">CEO · TechStartup SL</div>
+            </div>
+            <span class="tag tag-green">Activo</span>
+          </div>
+          <div class="contact-row">
+            <div class="avatar" style="background:rgba(167,139,250,0.2);color:#a78bfa">JR</div>
+            <div class="contact-info">
+              <div class="contact-name">Jorge Ruiz</div>
+              <div class="contact-sub">Freelancer · Diseño web</div>
+            </div>
+            <span class="tag tag-blue">Lead</span>
+          </div>
+          <div class="contact-row">
+            <div class="avatar" style="background:rgba(251,146,60,0.2);color:#fb923c">LP</div>
+            <div class="contact-info">
+              <div class="contact-name">Laura Ponce</div>
+              <div class="contact-sub">Directora · AgenciaX</div>
+            </div>
+            <span class="tag tag-orange">En nego.</span>
+          </div>
+          <div class="contact-row">
+            <div class="avatar" style="background:rgba(52,211,153,0.2);color:#34d399">DM</div>
+            <div class="contact-info">
+              <div class="contact-name">Daniel Mora</div>
+              <div class="contact-sub">CTO · CloudCorp</div>
+            </div>
+            <span class="tag tag-green">Cerrado</span>
+          </div>
+
+          <div style="margin-top:1.2rem; border-top:1px solid rgba(96,165,250,0.08); padding-top:1rem;">
+            <div style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-bottom:0.7rem; text-transform:uppercase; letter-spacing:0.06em;">Pipeline de ventas</div>
+            <div class="pipeline">
+              <div class="pipeline-col">
+                <div class="pipeline-label">Prospecto</div>
+                <div class="pipeline-card">Campaña SEO<div class="pipeline-amount">€ 1.200</div></div>
+                <div class="pipeline-card">App móvil<div class="pipeline-amount">€ 3.500</div></div>
+              </div>
+              <div class="pipeline-col">
+                <div class="pipeline-label">Propuesta</div>
+                <div class="pipeline-card">Tienda digital<div class="pipeline-amount">€ 2.800</div></div>
+              </div>
+              <div class="pipeline-col">
+                <div class="pipeline-label">Negociación</div>
+                <div class="pipeline-card">SaaS Plan Pro<div class="pipeline-amount">€ 6.000</div></div>
+              </div>
+              <div class="pipeline-col">
+                <div class="pipeline-label">Ganado ✓</div>
+                <div class="pipeline-card" style="border-color:rgba(52,211,153,0.3)">Consultoría IA<div class="pipeline-amount">€ 4.200</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 2 · REDES SOCIALES + LEADS -->
+  <section id="social" class="section-social">
+    <div class="two-col reverse">
+      <div>
+        <div class="section-eyebrow">Redes Sociales & Leads</div>
+        <h2>Convierte seguidores en clientes automáticamente</h2>
+        <p class="section-desc">
+          Conecta Instagram, LinkedIn, X y TikTok. Gestiona mensajes en una bandeja unificada
+          y deja que la IA clasifique y pase leads al CRM sin intervención manual.
+        </p>
+        <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="feature-card">
+            <div class="card-icon icon-pink">📱</div>
+            <h3>Bandeja unificada</h3>
+            <p>Todos tus DMs de Instagram, LinkedIn y X en un solo lugar.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-cyan">🤖</div>
+            <h3>Bot de captación</h3>
+            <p>Responde automáticamente y califica leads 24/7.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-purple">🎯</div>
+            <h3>Lead scoring IA</h3>
+            <p>Prioriza automáticamente los contactos con más potencial.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-green">📊</div>
+            <h3>Social analytics</h3>
+            <p>Mide el rendimiento de cada red y optimiza tu contenido.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock: Social feed -->
+      <div>
+        <div class="mock-ui">
+          <div class="mock-header">
+            <div class="mock-dot" style="background:#ff5f57"></div>
+            <div class="mock-dot" style="background:#febc2e"></div>
+            <div class="mock-dot" style="background:#28c840"></div>
+            <span class="mock-title">Bandeja Social · 4 nuevos</span>
+          </div>
+
+          <div class="social-feed">
+            <div class="social-msg" style="border-left-color:#e1306c;">
+              <div class="social-icon">📸</div>
+              <div class="social-text">
+                <strong>@ana.design</strong> — "Hola, me interesa el plan Pro, ¿tienen demo?"
+                <div class="social-meta">Instagram · hace 5 min</div>
+                <span class="lead-pill">Lead calificado ✓</span>
+              </div>
+            </div>
+            <div class="social-msg" style="border-left-color:#0077b5;">
+              <div class="social-icon">💼</div>
+              <div class="social-text">
+                <strong>Carlos VP · SaasCorp</strong> — "Vi tu post sobre automatización, impresionante."
+                <div class="social-meta">LinkedIn · hace 18 min</div>
+                <span class="lead-pill">Lead calificado ✓</span>
+              </div>
+            </div>
+            <div class="social-msg" style="border-left-color:#1da1f2;">
+              <div class="social-icon">🐦</div>
+              <div class="social-text">
+                <strong>@marta_ceo</strong> — "¿Qué diferencia hay entre Basic y Enterprise?"
+                <div class="social-meta">X · hace 32 min</div>
+                <span style="font-size:0.65rem;color:#fb923c;font-weight:700;">Esperando respuesta bot</span>
+              </div>
+            </div>
+            <div class="social-msg" style="border-left-color:#010101;">
+              <div class="social-icon">🎵</div>
+              <div class="social-text">
+                <strong>@luiscrm</strong> — "¿Tienen integración con Stripe?"
+                <div class="social-meta">TikTok · hace 1 h</div>
+                <span class="lead-pill">Lead calificado ✓</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN 3 · ANALYTICS -->
+  <section id="analytics">
+    <div class="two-col">
+      <div>
+        <div class="section-eyebrow">Analytics & Métricas</div>
+        <h2>Datos que convierten decisiones en ingresos</h2>
+        <p class="section-desc">
+          Paneles en tiempo real con las métricas que importan: ingresos, tasa de conversión,
+          ciclo de venta, ROI por canal y tendencias predictivas con IA.
+        </p>
+        <div class="feature-grid" style="grid-template-columns:1fr 1fr;">
+          <div class="feature-card">
+            <div class="card-icon icon-blue">📈</div>
+            <h3>Dashboards custom</h3>
+            <p>Arrastra widgets y crea tu panel perfecto sin código.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-green">🔮</div>
+            <h3>Predicción IA</h3>
+            <p>Previsión de ingresos y churn del próximo trimestre.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-orange">📩</div>
+            <h3>Informes automáticos</h3>
+            <p>Reportes PDF semanales directamente en tu correo.</p>
+          </div>
+          <div class="feature-card">
+            <div class="card-icon icon-purple">🔗</div>
+            <h3>Integraciones</h3>
+            <p>Conecta Google Analytics, Stripe, Mailchimp y más.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mock: Analytics -->
+      <div>
+        <div class="mock-ui">
+          <div class="mock-header">
+            <div class="mock-dot" style="background:#ff5f57"></div>
+            <div class="mock-dot" style="background:#febc2e"></div>
+            <div class="mock-dot" style="background:#28c840"></div>
+            <span class="mock-title">Analytics · Junio 2026</span>
+          </div>
+
+          <div class="metrics-row">
+            <div class="metric-box">
+              <div class="metric-val" style="color:#60a5fa">€ 28.4k</div>
+              <div class="metric-lbl">Ingresos</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" style="color:#34d399">+34 %</div>
+              <div class="metric-lbl">Conversión</div>
+            </div>
+            <div class="metric-box">
+              <div class="metric-val" style="color:#a78bfa">147</div>
+              <div class="metric-lbl">Leads nuevos</div>
+            </div>
+          </div>
+
+          <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:0.5rem; text-transform:uppercase; letter-spacing:0.06em;">Ingresos por semana</div>
+          <div class="chart-bar-row">
+            <div style="display:flex;flex-direction:column;flex:1;align-items:center;">
+              <div class="bar" style="height:42%"></div>
+              <div class="bar-label">S1</div>
+            </div>
+            <div style="display:flex;flex-direction:column;flex:1;align-items:center;">
+              <div class="bar" style="height:58%"></div>
+              <div class="bar-label">S2</div>
+            </div>
+            <div style="display:flex;flex-direction:column;flex:1;align-items:center;">
+              <div class="bar" style="height:73%"></div>
+              <div class="bar-label">S3</div>
+            </div>
+            <div style="display:flex;flex-direction:column;flex:1;align-items:center;">
+              <div class="bar" style="height:65%"></div>
+              <div class="bar-label">S4</div>
+            </div>
+            <div style="display:flex;flex-direction:column;flex:1;align-items:center;">
+              <div class="bar" style="height:88%"></div>
+              <div class="bar-label">S5</div>
+            </div>
+            <div style="display:flex;flex-direction:column;flex:1;align-items:center;">
+              <div class="bar" style="height:100%; background:linear-gradient(to top, #3b82f6, #34d399);"></div>
+              <div class="bar-label" style="color:#34d399;">S6</div>
+            </div>
+          </div>
+
+          <div style="margin-top:1rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+            <span class="tag tag-green">Churn: 2.1 %</span>
+            <span class="tag tag-blue">NPS: 74</span>
+            <span class="tag tag-purple">CAC: € 38</span>
+            <span class="tag tag-orange">LTV: € 1.240</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section id="cta" class="cta-section">
+    <div class="cta-box">
+      <div class="section-eyebrow" style="margin-bottom:0.75rem;">Empieza hoy</div>
+      <h2>Tu CRM listo en menos de 2 minutos</h2>
+      <p>Sin tarjeta de crédito. 14 días gratis. Cancela cuando quieras.</p>
+      <div class="input-row">
+        <input type="email" placeholder="tu@email.com">
+        <button class="btn-primary">Crear cuenta gratis</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 <span>VideCRM</span> · Hecho con propósito para negocios digitales.</p>
+  </footer>
+
 </body>
 </html>
