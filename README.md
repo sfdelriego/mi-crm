@@ -1,4 +1,4 @@
-# VideCRM
+# VibeCRM
 
 Landing page de presentación para un CRM moderno, construida en HTML y CSS puro, sin dependencias.
 
